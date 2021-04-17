@@ -39,7 +39,7 @@ query {
 
 ## Example Mutations
 
-```graphl
+```graphql
 mutation {
   newProduct(product: {
     title: "fancy toaster"
