@@ -20,16 +20,16 @@ class SqlDataSource extends DataSource {
   }
 
   async createOrder({ items }) {
-    const order = await this.store.order.create({ })
+    const order = await this.store.order.create({})
 
     for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+      const item = items[i]
       await this.store.lineItem.create({
         orderId: order.id,
         ...item,
       })
     }
-    
+
     const orderCreated = await this.findOrder(order.id)
 
     this.context.pubSub.publish(ORDER_CREATED, {

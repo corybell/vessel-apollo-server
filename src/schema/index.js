@@ -1,9 +1,5 @@
 const { gql } = require("apollo-server")
-const {
-  product,
-  lineItem,
-  order,
-} = require("./types")
+const { product, lineItem, order } = require("./types")
 
 const query = `
   type Query {

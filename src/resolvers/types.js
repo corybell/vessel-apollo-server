@@ -1,7 +1,7 @@
 const Order = {
   items: async (order, _, { dataSources }) => {
     return order.line_items
-  }
+  },
 }
 
 const LineItem = {
@@ -11,7 +11,7 @@ const LineItem = {
 
   order: async (lineItem, _, { dataSources }) => {
     return await dataSources.sql.findOrder(lineItem.orderId)
-  }
+  },
 }
 
 module.exports = {

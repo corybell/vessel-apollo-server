@@ -36,5 +36,5 @@ const order = `
 module.exports = {
   product,
   lineItem,
-  order  
+  order,
 }
