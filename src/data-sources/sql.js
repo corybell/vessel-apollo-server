@@ -1,6 +1,6 @@
 const { DataSource } = require("apollo-datasource")
+const { createOrder, createProduct } = require("../data-access/creator")
 const { ORDER_CREATED } = require("../events")
-const { Op } = require("sequelize")
 
 class SqlDataSource extends DataSource {
   constructor({ store }) {
@@ -12,25 +12,14 @@ class SqlDataSource extends DataSource {
     this.context = config.context
   }
 
-  async createProduct({ title }) {
-    const productCreated = await this.store.product.create({
-      title,
-    })
-    return productCreated
+  async addProduct(product) {
+    return await createProduct(this.store, product)
   }
 
-  async createOrder({ items }) {
-    const order = await this.store.order.create({})
+  async addOrder(order) {
+    const newOrder = await createOrder(this.store, order)
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i]
-      await this.store.lineItem.create({
-        orderId: order.id,
-        ...item,
-      })
-    }
-
-    const orderCreated = await this.findOrder(order.id)
+    const orderCreated = await this.findOrder(newOrder.id)
 
     this.context.pubSub.publish(ORDER_CREATED, {
       orderCreated,

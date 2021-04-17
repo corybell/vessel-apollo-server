@@ -4,7 +4,7 @@ const { ApolloServer } = require("apollo-server")
 const typeDefs = require("./schema")
 const resolvers = require("./resolvers")
 const { createStore } = require("./db")
-const getDataSources = require("./datasources")
+const getDataSources = require("./data-sources")
 const context = require("./context")
 
 // creates a sequelize connection once. NOT for every request
