@@ -20,11 +20,11 @@ function buildTypes(store) {
 }
 
 function buildRelationships(store) {
-  store.lineItem.hasOne(store.product)
-  // store.product.hasMany(store.lineItem)
-
   store.order.hasMany(store.lineItem)
   store.lineItem.belongsTo(store.order)
+
+  store.product.belongsToMany(store.order, { through: store.lineItem })
+  store.order.belongsToMany(store.product, { through: store.lineItem })
 }
 
 module.exports.createStore = () => {

@@ -21,7 +21,7 @@ class SqlDataSource extends DataSource {
 
   async createOrder({ items }) {
     const orderCreated = await this.store.order.create({ })
-    
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       await this.store.lineItem.create({
@@ -51,7 +51,7 @@ class SqlDataSource extends DataSource {
 
   async findOrders() {
     return await this.store.order.findAll({
-      include: [this.store.lineItem],
+      include: [this.store.lineItem, this.store.product],
       order: [["createdAt", "DESC"]],
     })
   }

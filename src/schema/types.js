@@ -11,13 +11,13 @@ const product = `
 
 const lineItem = `
   type LineItem {
-    id: ID!
     product: Product!
+    order: Order!
     quantity: Int!
   }
 
   input LineItemInput {
-    product: ProductInput!
+    productId: ID!
     quantity: Int!
   }
 `
