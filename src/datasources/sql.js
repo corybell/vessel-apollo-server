@@ -20,17 +20,17 @@ class SqlDataSource extends DataSource {
   }
 
   async createOrder({ items }) {
-    const orderCreated = await this.store.order.create({ })
+    const order = await this.store.order.create({ })
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       await this.store.lineItem.create({
-        orderId: orderCreated.id,
+        orderId: order.id,
         ...item,
       })
     }
     
-    await orderCreated.reload()
+    const orderCreated = await this.findOrder(order.id)
 
     this.context.pubSub.publish(ORDER_CREATED, {
       orderCreated,
@@ -51,7 +51,7 @@ class SqlDataSource extends DataSource {
 
   async findOrders() {
     return await this.store.order.findAll({
-      include: [this.store.lineItem, this.store.product],
+      include: [this.store.lineItem],
       order: [["createdAt", "DESC"]],
     })
   }
@@ -60,10 +60,6 @@ class SqlDataSource extends DataSource {
     return await this.store.order.findByPk(id, {
       include: [this.store.lineItem],
     })
-  }
-
-  async findLineItem(id) {
-    return await this.store.lineItem.findByPk(id)
   }
 }
 

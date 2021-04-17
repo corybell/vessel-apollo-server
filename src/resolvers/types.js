@@ -1,4 +1,3 @@
-
 const Order = {
   items: async (order, _, { dataSources }) => {
     return order.line_items
@@ -7,13 +6,11 @@ const Order = {
 
 const LineItem = {
   product: async (lineItem, _, { dataSources }) => {
-    const res = await dataSources.sql.findProduct(lineItem.productId)
-    return res
+    return await dataSources.sql.findProduct(lineItem.productId)
   },
 
   order: async (lineItem, _, { dataSources }) => {
-    const res = await dataSources.sql.findOrder(lineItem.orderId)
-    return res
+    return await dataSources.sql.findOrder(lineItem.orderId)
   }
 }
 
