@@ -1,6 +1,6 @@
 async function createProduct(store, product) {
   const productCreated = await store.product.create({
-    ...product
+    ...product,
   })
 
   return productCreated

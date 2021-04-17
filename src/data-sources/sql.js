@@ -1,6 +1,11 @@
 const { DataSource } = require("apollo-datasource")
 const { createOrder, createProduct } = require("../data-access/creator")
-const { findOrder, findOrders, findProduct, findProducts } = require("../data-access/finder")
+const {
+  findOrder,
+  findOrders,
+  findProduct,
+  findProducts,
+} = require("../data-access/finder")
 const { ORDER_CREATED } = require("../events")
 
 class SqlDataSource extends DataSource {
