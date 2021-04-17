@@ -1,53 +1,30 @@
 const { Sequelize } = require("sequelize")
 
 function buildTypes(store) {
-  store.clinicSearchResult = store.db.define("clinic_search_result", {
+  store.product = store.db.define("product", {
+    title: Sequelize.STRING,
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
-    name: Sequelize.STRING,
-    url: Sequelize.STRING,
   })
 
-  store.clinicSearch = store.db.define("clinic_search", {
+  store.order = store.db.define("order", {
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
-    ts: Sequelize.STRING,
-    url: Sequelize.STRING,
   })
 
-  store.clinicDetailResult = store.db.define("clinic_detail_result", {
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
-    time: Sequelize.STRING,
-    numberAvailable: Sequelize.STRING,
-  })
-
-  store.clinicDetail = store.db.define("clinic_detail", {
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE,
-    ts: Sequelize.STRING,
-    url: Sequelize.STRING,
-    name: Sequelize.STRING,
-  })
-
-  store.run = store.db.define("run", {
+  store.lineItem = store.db.define("line_item", {
+    quantity: Sequelize.INTEGER,
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
   })
 }
 
 function buildRelationships(store) {
-  store.clinicSearch.hasMany(store.clinicSearchResult)
-  store.clinicSearchResult.belongsTo(store.clinicSearch)
+  store.lineItem.hasOne(store.product)
+  // store.product.hasMany(store.lineItem)
 
-  store.clinicDetail.hasMany(store.clinicDetailResult)
-  store.clinicDetailResult.belongsTo(store.clinicDetail)
-
-  store.run.hasOne(store.clinicSearch)
-  store.clinicSearch.belongsTo(store.run)
-
-  store.run.hasMany(store.clinicDetail)
-  store.clinicDetail.belongsTo(store.run)
+  store.order.hasMany(store.lineItem)
+  store.lineItem.belongsTo(store.order)
 }
 
 module.exports.createStore = () => {

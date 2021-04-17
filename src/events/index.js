@@ -1,5 +1,5 @@
-const RUN_CREATED = "RUN_CREATED"
+const ORDER_CREATED = "ORDER_CREATED"
 
 module.exports = {
-  RUN_CREATED,
+  ORDER_CREATED,
 }

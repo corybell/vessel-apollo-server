@@ -1,78 +1,40 @@
-const clinicDetail = `
-  type ClinicDetail {
+const product = `
+  type Product {
     id: ID!
-    ts: String!
-    url: String!
-    name: String!
-    results: [ClinicDetailResult]
+    title: String!
   }
 
-  input ClinicDetailInput {
-    url: String!
-    ts: String!
-    name: String!
-    results: [ClinicDetailResultInput]
+  input ProductInput {
+    title: String!
   }
 `
 
-const clinicDetailResult = `
-  input ClinicDetailResultInput {
-    time: String!
-    numberAvailable: String!
+const lineItem = `
+  type LineItem {
+    id: ID!
+    product: Product!
+    quantity: Int!
   }
 
-  type ClinicDetailResult {
-    id: ID!
-    time: String!
-    numberAvailable: String!
+  input LineItemInput {
+    product: ProductInput!
+    quantity: Int!
   }
 `
 
-const clinicSearch = `
-  type ClinicSearch {
+const order = `
+  type Order {
     id: ID!
-    url: String!
-    ts: String!
-    results: [ClinicSearchResult]
+    items: [LineItem!]
   }
 
-  input ClinicSearchInput {
-    url: String!
-    ts: String!
-    results: [ClinicSearchResultInput]
-  }
-`
-
-const clinicSearchResult = `
-  type ClinicSearchResult {
-    id: ID!
-    name: String!
-    url: String!
-  }  
-
-  input ClinicSearchResultInput {
-    name: String!
-    url: String!
-  }
-`
-
-const run = `
-  type Run {
-    id: ID!
-    clinicSearch: ClinicSearch!
-    clinicDetails: [ClinicDetail]
-  }
-
-  input RunInput {
-    clinicSearch: ClinicSearchInput!
-    clinicDetails: [ClinicDetailInput]
+  input OrderInput {
+    items: [LineItemInput!]
   }
 `
 
 module.exports = {
-  clinicDetail,
-  clinicDetailResult,
-  clinicSearch,
-  clinicSearchResult,
-  run,
+  product,
+  lineItem,
+  order  
 }

@@ -1,26 +1,16 @@
 const Query = {
-  clinicSearches: async (_, __, { dataSources }) => {
-    return await dataSources.sql.findClinicSearches()
+  getProducts: async (_, __, { dataSources }) => {
+    return await dataSources.sql.findProducts()
   },
-  clinicSearch: async (_, { id }, { dataSources }) => {
-    return await dataSources.sql.findClinicSearch(id)
-  },
-
-  clinicDetails: async (_, __, { dataSources }) => {
-    return await dataSources.sql.findClinicDetails()
-  },
-  clinicDetail: async (_, { id }, { dataSources }) => {
-    return await dataSources.sql.findClinicDetail(id)
+  getProduct: async (_, { id }, { dataSources }) => {
+    return await dataSources.sql.findProduct(id)
   },
 
-  runs: async (_, __, { dataSources }) => {
-    return await dataSources.sql.findRuns()
+  getOrders: async (_, __, { dataSources }) => {
+    return await dataSources.sql.findOrders()
   },
-  run: async (_, { id }, { dataSources }) => {
-    return await dataSources.sql.findRun(id)
-  },
-  latestRun: async (_, __, { dataSources }) => {
-    return await dataSources.sql.latestRun()
+  getOrder: async (_, { id }, { dataSources }) => {
+    return await dataSources.sql.findOrder(id)
   },
 }
 

@@ -1,35 +1,30 @@
 const { gql } = require("apollo-server")
 const {
-  clinicSearch,
-  clinicSearchResult,
-  clinicDetail,
-  clinicDetailResult,
-  run,
+  product,
+  lineItem,
+  order,
 } = require("./types")
 
 const query = `
   type Query {
-    clinicSearch(id: ID!): ClinicSearch
-    clinicSearches: [ClinicSearch]
+    getProduct(id: ID!): Product
+    getProducts: [Product!]
 
-    clinicDetail(id: ID!): ClinicDetail
-    clinicDetails: [ClinicDetail]
-
-    run(id: ID!): Run
-    runs: [Run]
-    latestRun: Run
+    getOrder(id: ID!): Order
+    getOrders: [Order!]
   }
 `
 
 const mutation = `
   type Mutation {
-    createRun(run: RunInput): Run
+    newProduct(product: ProductInput!): Product
+    newOrder(order: OrderInput!): Order
   }
 `
 
 const subscription = `
   type Subscription {
-    runCreated: Run
+    orderCreated: Order
   }
 `
 
@@ -38,13 +33,9 @@ const typeDefs = gql`
   ${mutation}
   ${subscription}
 
-  ${clinicSearch}
-  ${clinicSearchResult}
-
-  ${clinicDetail}
-  ${clinicDetailResult}
-
-  ${run}
+  ${product}
+  ${lineItem}
+  ${order}
 `
 
 module.exports = typeDefs

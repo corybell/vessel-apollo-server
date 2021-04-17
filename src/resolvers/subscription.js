@@ -1,9 +1,9 @@
-const { RUN_CREATED } = require("../events")
+const { ORDER_CREATED } = require("../events")
 
 const Subscription = {
-  runCreated: {
+  orderCreated: {
     subscribe: (_, __, { pubSub }) => {
-      return pubSub.asyncIterator([RUN_CREATED])
+      return pubSub.asyncIterator([ORDER_CREATED])
     },
   },
 }

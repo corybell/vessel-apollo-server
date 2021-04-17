@@ -1,5 +1,5 @@
 const { DataSource } = require("apollo-datasource")
-const { RUN_CREATED } = require("../events")
+const { ORDER_CREATED } = require("../events")
 const { Op } = require("sequelize")
 
 class SqlDataSource extends DataSource {
@@ -12,110 +12,58 @@ class SqlDataSource extends DataSource {
     this.context = config.context
   }
 
-  async createRun({ clinicSearch, clinicDetails }) {
-    const runCreated = await this.store.run.create({})
-
-    await this.createClinicSearch(runCreated.id, clinicSearch)
-
-    if (clinicDetails && clinicDetails.length) {
-      for (let i = 0; i < clinicDetails.length; i++) {
-        await this.createClinicDetail(runCreated.id, clinicDetails[i])
-      }
-    }
-
-    await runCreated.reload()
-
-    this.context.pubSub.publish(RUN_CREATED, {
-      runCreated,
+  async createProduct({ title }) {
+    const productCreated = await this.store.product.create({
+      title,
     })
-
-    return runCreated
+    return productCreated
   }
 
-  async createClinicSearch(runId, { url, ts, results }) {
-    const clinicSearchCreated = await this.store.clinicSearch.create({
-      runId,
-      url,
-      ts,
-    })
-
-    for (let i = 0; i < results.length; i++) {
-      const element = results[i]
-      await this.store.clinicSearchResult.create({
-        clinicSearchId: clinicSearchCreated.id,
-        ...element,
+  async createOrder({ items }) {
+    const orderCreated = await this.store.order.create({ })
+    
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      await this.store.lineItem.create({
+        orderId: orderCreated.id,
+        ...item,
       })
     }
+    
+    await orderCreated.reload()
 
-    return clinicSearchCreated
-  }
-
-  async createClinicDetail(runId, { url, ts, name, results }) {
-    const clinicDetailCreated = await this.store.clinicDetail.create({
-      runId,
-      url,
-      ts,
-      name,
+    this.context.pubSub.publish(ORDER_CREATED, {
+      orderCreated,
     })
 
-    for (let i = 0; i < results.length; i++) {
-      const element = results[i]
-      this.store.clinicDetailResult.create({
-        clinicDetailId: clinicDetailCreated.id,
-        ...element,
-      })
-    }
-
-    return clinicDetailCreated
+    return orderCreated
   }
 
-  async latestRun() {
-    return await this.store.run.findOne({
-      include: [this.store.clinicSearch, this.store.clinicDetail],
-      where: {
-        id: {
-          [Op.eq]: await this.store.run.max("id"),
-        },
-      },
-    })
-  }
-
-  async findRuns() {
-    return await this.store.run.findAll({
-      include: [this.store.clinicSearch, this.store.clinicDetail],
-      limit: 12,
+  async findProducts() {
+    return await this.store.product.findAll({
       order: [["createdAt", "DESC"]],
     })
   }
 
-  async findRun(id) {
-    return await this.store.run.findByPk(id, {
-      include: [this.store.clinicSearch, this.store.clinicDetail],
+  async findProduct(id) {
+    return await this.store.product.findByPk(id)
+  }
+
+  async findOrders() {
+    return await this.store.order.findAll({
+      include: [this.store.lineItem],
+      order: [["createdAt", "DESC"]],
     })
   }
 
-  async findClinicSearches() {
-    return await this.store.clinicSearch.findAll({
-      include: this.store.clinicSearchResult,
+  async findOrder(id) {
+    return await this.store.order.findByPk(id, {
+      include: [this.store.lineItem],
     })
   }
 
-  async findClinicSearch(id) {
-    return await this.store.clinicSearch.findByPk(id, {
-      include: this.store.clinicSearchResult,
-    })
-  }
-
-  async findClinicDetails() {
-    return await this.store.clinicDetail.findAll({
-      include: this.store.clinicDetailResult,
-    })
-  }
-
-  async findClinicDetail(id) {
-    return await this.store.clinicDetail.findByPk(id, {
-      include: this.store.clinicDetailResult,
-    })
+  async findLineItem(id) {
+    return await this.store.lineItem.findByPk(id)
   }
 }
 

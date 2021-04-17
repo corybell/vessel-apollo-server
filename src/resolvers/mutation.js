@@ -1,6 +1,9 @@
 const Mutation = {
-  createRun: async (_, { run }, { dataSources }) => {
-    return await dataSources.sql.createRun(run)
+  newProduct: async (_, { product }, { dataSources }) => {
+    return await dataSources.sql.createProduct(product)
+  },
+  newOrder: async (_, { order }, { dataSources }) => {
+    return await dataSources.sql.createOrder(order)
   },
 }
 
