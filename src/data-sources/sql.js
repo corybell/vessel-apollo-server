@@ -13,19 +13,18 @@ class SqlDataSource extends DataSource {
     this.context = config.context
   }
 
+  publishEvent(event, payload) {
+    this.context.pubSub.publish(event, payload)
+  }
+
   async addProduct(product) {
     return await createProduct(this.store, product)
   }
 
   async addOrder(order) {
     const newOrder = await createOrder(this.store, order)
-
     const orderCreated = await findOrder(this.store, newOrder.id)
-
-    this.context.pubSub.publish(ORDER_CREATED, {
-      orderCreated,
-    })
-
+    this.publishEvent(ORDER_CREATED, { orderCreated })
     return orderCreated
   }
 
