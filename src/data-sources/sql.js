@@ -1,5 +1,6 @@
 const { DataSource } = require("apollo-datasource")
 const { createOrder, createProduct } = require("../data-access/creator")
+const { findOrder, findOrders, findProduct, findProducts } = require("../data-access/finder")
 const { ORDER_CREATED } = require("../events")
 
 class SqlDataSource extends DataSource {
@@ -19,7 +20,7 @@ class SqlDataSource extends DataSource {
   async addOrder(order) {
     const newOrder = await createOrder(this.store, order)
 
-    const orderCreated = await this.findOrder(newOrder.id)
+    const orderCreated = await findOrder(this.store, newOrder.id)
 
     this.context.pubSub.publish(ORDER_CREATED, {
       orderCreated,
@@ -28,27 +29,20 @@ class SqlDataSource extends DataSource {
     return orderCreated
   }
 
-  async findProducts() {
-    return await this.store.product.findAll({
-      order: [["createdAt", "DESC"]],
-    })
+  async getProducts() {
+    return await findProducts(this.store)
   }
 
-  async findProduct(id) {
-    return await this.store.product.findByPk(id)
+  async getProduct(id) {
+    return await findProduct(this.store, id)
   }
 
-  async findOrders() {
-    return await this.store.order.findAll({
-      include: [this.store.lineItem],
-      order: [["createdAt", "DESC"]],
-    })
+  async getOrders() {
+    return await findOrders(this.store)
   }
 
-  async findOrder(id) {
-    return await this.store.order.findByPk(id, {
-      include: [this.store.lineItem],
-    })
+  async getOrder(id) {
+    return await findOrder(this.store, id)
   }
 }
 

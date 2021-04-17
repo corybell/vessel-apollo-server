@@ -6,11 +6,11 @@ const Order = {
 
 const LineItem = {
   product: async (lineItem, _, { dataSources }) => {
-    return await dataSources.sql.findProduct(lineItem.productId)
+    return await dataSources.sql.getProduct(lineItem.productId)
   },
 
   order: async (lineItem, _, { dataSources }) => {
-    return await dataSources.sql.findOrder(lineItem.orderId)
+    return await dataSources.sql.getOrder(lineItem.orderId)
   },
 }
 
